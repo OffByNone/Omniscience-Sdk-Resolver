@@ -12,8 +12,7 @@ var SdkResolver = (function () {
 	_createClass(SdkResolver, [{
 		key: 'resolve',
 		value: function resolve() {
-			var FirefoxSdk = require('./AddonSdk');
-			return new FirefoxSdk();
+			return require('./AddonSdk');
 		}
 	}]);
 
