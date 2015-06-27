@@ -1,6 +1,6 @@
 {
 	"name": "omniscience-sdk-resolver",
-	"version": "0.5.1",
+	"version": "0.6.0",
 	"description": "SDK Resolver for Omniscience.",
 	"main": "./bin/index.js",
 	"author": "OffByNone",
