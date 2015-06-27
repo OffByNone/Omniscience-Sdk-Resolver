@@ -1,31 +1,31 @@
 {
-	"name": "omniscience-sdk-resolver",
-	"version": "0.6.0",
-	"description": "SDK Resolver for Omniscience.",
-	"main": "./bin/index.js",
-	"author": "OffByNone",
-	"license": "MIT",
-	"homepage": "https://github.com/offbynone/omniscience-sdk-resolver",
-	"bugs": {
-		"url": "https://github.com/offbynone/omniscience-sdk-resolver/issues",
-		"email": "offbynone@outlook.com"
-	},
-	"keywords": [
-		"omniscience"
-	],
-	"engines": {
-		"Firefox": ">=38.0a1",
-		"Fennec": ">=38.0a1"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/offbynone/omniscience-sdk-resolver.git"
-	},
-	"devDependencies": {
-		"babel": "^5.5.8",
-		"codecov.io": "^0.1.4",
-		"eslint": "^0.22.1",
-		"istanbul": "^0.3.16",
-		"jasmine": "^2.3.1"
-	}
+  "name": "omniscience-sdk-resolver",
+  "version": "0.6.0",
+  "description": "SDK Resolver for Omniscience.",
+  "main": "./bin/index.js",
+  "author": "OffByNone",
+  "license": "MIT",
+  "homepage": "https://github.com/offbynone/omniscience-sdk-resolver",
+  "bugs": {
+    "url": "https://github.com/offbynone/omniscience-sdk-resolver/issues",
+    "email": "offbynone@outlook.com"
+  },
+  "keywords": [
+    "omniscience"
+  ],
+  "engines": {
+    "Firefox": ">=38.0a1",
+    "Fennec": ">=38.0a1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/offbynone/omniscience-sdk-resolver.git"
+  },
+  "devDependencies": {
+    "babel": "^5.5.8",
+    "codecov.io": "^0.1.4",
+    "eslint": "^0.22.1",
+    "istanbul": "^0.3.16",
+    "jasmine": "^2.3.1"
+  }
 }
