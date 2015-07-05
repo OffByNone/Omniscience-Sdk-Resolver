@@ -4,11 +4,10 @@
   "description": "SDK Resolver for Omniscience.",
   "main": "./bin/index.js",
   "author": "OffByNone",
-  "license": "MIT",
+  "license": "GNU GPL v3",
   "homepage": "https://github.com/offbynone/omniscience-sdk-resolver",
   "bugs": {
-    "url": "https://github.com/offbynone/omniscience-sdk-resolver/issues",
-    "email": "offbynone@outlook.com"
+    "url": "https://github.com/offbynone/omniscience-sdk-resolver/issues"
   },
   "keywords": [
     "omniscience"
