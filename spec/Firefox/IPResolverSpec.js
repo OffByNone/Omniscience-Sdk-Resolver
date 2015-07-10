@@ -1,5 +1,3 @@
-///<reference path="../support/jasmine.d.ts" />
-
 require("babel/register");
 
 const Constants = require("../../lib/Constants");
@@ -32,7 +30,7 @@ describe("IPResolver", function () {
 			_mockDnsService.resolve = jasmine.createSpy("resolve").and.returnValue(mockRecord);
 
 			//act
-			_sut.resolveIPs().then(function (actual) { 
+			_sut.resolveIPs().then(function (actual) {
 				//assert
 				expect(_mockDnsService.resolve).toHaveBeenCalledWith(myHostName, 0);
 				expect(mockRecord.getNextAddrAsString.calls.count()).toBe(2);
@@ -60,7 +58,7 @@ describe("IPResolver", function () {
 			_mockDnsService.resolve = jasmine.createSpy("resolve").and.returnValue(mockRecord);
 
 			//act
-			_sut.resolveIPs().then(function (actual) { 
+			_sut.resolveIPs().then(function (actual) {
 				//assert
 				expect(_mockDnsService.resolve).toHaveBeenCalledWith(myHostName, 0);
 				expect(mockRecord.getNextAddrAsString.calls.count()).toBe(2);
@@ -98,7 +96,7 @@ describe("IPResolver", function () {
 				expect(_mockUDP.createUDPSocket).toHaveBeenCalledWith();
 				expect(mockUDPSocket.joinMulticast).toHaveBeenCalledWith(Constants.IPResolverMulticast);
 				expect(mockUDPSocket.asyncListen).toHaveBeenCalledWith({ onPacketReceived: jasmine.any(Function) });
-				
+
 				expect(actual.length).toBe(2)
 				expect(actual[0]).toBe(messageAddress);
 				expect(actual[1]).toBe('127.0.0.1');

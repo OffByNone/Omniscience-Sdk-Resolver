@@ -1,5 +1,3 @@
-///<reference path="../support/jasmine.d.ts" />
-
 require("babel/register");
 
 const Constants = require("../../lib/Constants");
@@ -25,7 +23,7 @@ describe("FileUtilities", function () {
 
 			//act
 			var actual = _sut.create(fileInfo);
-			
+
 			//assert
 			expect(_mockFileSystem.createLocalFile).toHaveBeenCalledWith();
 			expect(mockFile.initWithPath).toHaveBeenCalledWith(fileInfo);
@@ -40,7 +38,7 @@ describe("FileUtilities", function () {
 
 			//act
 			var actual = _sut.create(fileInfo);
-			
+
 			//assert
 			expect(_mockFileSystem.createLocalFile).toHaveBeenCalledWith();
 			expect(mockFile.initWithFile).toHaveBeenCalledWith(fileInfo);
@@ -56,7 +54,7 @@ describe("FileUtilities", function () {
 
 			//act
 			var actual = _sut.readBytes(filePath);
-			
+
 			//assert
 			expect(actual).toBe(file);
 			expect(_mockFileSystem.read).toHaveBeenCalledWith(filePath);
@@ -110,7 +108,7 @@ describe("FileUtilities", function () {
 				expect(actual[1].name).toBe(file2.leafName);
 				expect(actual[1].type).toBe(file2Type);
 			});
-			
+
 			//assert
 			expect(_mockWindowUtilities.getMostRecentBrowserWindow).toHaveBeenCalledWith();
 			expect(_mockFileSystem.filePicker).toHaveBeenCalledWith();
