@@ -30,7 +30,7 @@ var fileSystem = {
 		return Cc["@mozilla.org/filepicker;1"].createInstance(Ci.nsIFilePicker);
 	}, // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFilePicker
 	mimeService: Cc["@mozilla.org/uriloader/external-helper-app-service;1"].getService(Ci.nsIMIMEService),
-	read: OS.File
+	read: OS.File.read
 };
 
 module.exports.createTCPSocket = function () {
