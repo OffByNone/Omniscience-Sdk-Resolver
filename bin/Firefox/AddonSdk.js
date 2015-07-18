@@ -19,8 +19,8 @@ var OS = _Cu$import2.OS;
 // https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/OSFile.jsm
 
 var UDP = require("./UDP");
-var IPResolver = require("./IPResolver");
-var FileUtilities = require("./FileUtilities");
+var IPResolverClass = require("./IPResolver");
+var FileUtilitiesClass = require("./FileUtilities");
 var windowUtils = require("sdk/window/utils"); // https://developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs/window_utils
 var fileSystem = {
 	createLocalFile: function createLocalFile() {
@@ -29,7 +29,7 @@ var fileSystem = {
 	filePicker: function filePicker() {
 		return Cc["@mozilla.org/filepicker;1"].createInstance(Ci.nsIFilePicker);
 	}, // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFilePicker
-	mimeService: Cc["@mozilla.org/uriloader/external-helper-app-service;1"].getService(Ci.nsIMIMEService),
+	getTypeFromFile: Cc["@mozilla.org/uriloader/external-helper-app-service;1"].getService(Ci.nsIMIMEService).getTypeFromFile,
 	read: OS.File.read
 };
 
@@ -61,10 +61,10 @@ module.exports.url = function () {
 	return require("sdk/url");
 }; // https://developer.mozilla.org/en-US/Add-ons/SDK/High-Level_APIs/url
 
-module.exports.FileUtilities = new FileUtilities(fileSystem, windowUtils);
+module.exports.FileUtilities = new FileUtilitiesClass(fileSystem, windowUtils);
 module.exports.udp = new UDP(function () {
 	return Cc["@mozilla.org/network/udp-socket;1"].createInstance(Ci.nsIUDPSocket);
 }, // http://dxr.mozilla.org/mozilla-central/source/netwerk/base/public/nsIUDPSocket.idl
 Services.scriptSecurityManager.getSystemPrincipal());
-module.exports.IPResolver = new IPResolver(Cc["@mozilla.org/network/dns-service;1"].getService(Ci.nsIDNSService), // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDNSService
+module.exports.IPResolver = new IPResolverClass(Cc["@mozilla.org/network/dns-service;1"].getService(Ci.nsIDNSService), // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDNSService
 module.exports.udp);
