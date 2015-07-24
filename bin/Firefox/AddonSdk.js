@@ -60,6 +60,9 @@ module.exports.storage = function () {
 module.exports.url = function () {
 	return require("sdk/url");
 }; // https://developer.mozilla.org/en-US/Add-ons/SDK/High-Level_APIs/url
+module.exports.getNativeWindowMenu = function () {
+	return Services.wm.getMostRecentWindow("navigator:browser").NativeWindow.menu;
+}; //for firefox for android
 
 module.exports.FileUtilities = new FileUtilitiesClass(fileSystem, windowUtils);
 module.exports.udp = new UDP(function () {
