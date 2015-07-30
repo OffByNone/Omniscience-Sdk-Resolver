@@ -4,24 +4,31 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var UDP = (function () {
-    function UDP(udpSocketProvider, scriptSecurityManager) {
-        _classCallCheck(this, UDP);
+var StorageService = (function () {
+	function StorageService(nativeStorage) {
+		_classCallCheck(this, StorageService);
 
-        this._udpSocketProvider = udpSocketProvider;
-        this._scriptSecurityManager = scriptSecurityManager;
-    }
+		this._nativeStorage = nativeStorage;
+	}
 
-    _createClass(UDP, [{
-        key: "createUDPSocket",
-        value: function createUDPSocket(sourcePort) {
-            var socket = this._udpSocketProvider();
-            socket.init(sourcePort || -1, false, this._scriptSecurityManager);
-            return socket;
-        }
-    }]);
+	_createClass(StorageService, [{
+		key: "get",
+		value: function get(key) {
+			return this._nativeStorage[key];
+		}
+	}, {
+		key: "set",
+		value: function set(key, value) {
+			this._nativeStorage[key] = value;
+		}
+	}, {
+		key: "remove",
+		value: function remove(key) {
+			delete this._nativeStorage[key];
+		}
+	}]);
 
-    return UDP;
+	return StorageService;
 })();
 
-module.exports = UDP;
+module.exports = StorageService;

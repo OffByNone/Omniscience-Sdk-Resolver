@@ -2,7 +2,7 @@
 "use strict";
 
 module.exports = {
-	notify: function (options) {
+	notify: function notify(options) {
 		var chromeOptions = {
 			type: "basic",
 			title: options.title,
