@@ -12,7 +12,7 @@ var SdkResolver = (function () {
 	_createClass(SdkResolver, [{
 		key: "resolve",
 		value: function resolve() {
-			return require("./Firefox/AddonSdk");
+			return require("./Chrome/sdk.js");
 		}
 	}]);
 

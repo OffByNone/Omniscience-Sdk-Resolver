@@ -23,12 +23,14 @@ var UDPSocket = (function () {
 			this._port = sourcePort;
 			this._udp.create({ bufferSize: Constants.socketBufferSize }, function (createInfo) {
 				_this._socketId = createInfo.socketId;
+				console.log(createInfo);
 			});
 		}
 	}, {
 		key: "bind",
 		value: function bind(ipAddress) {
 			this._ipAddress = ipAddress;
+			console.log(this._socketId);
 			this._udp.bind(this._socketId, ipAddress, this._port || 0);
 		}
 	}, {
@@ -46,12 +48,12 @@ var UDPSocket = (function () {
 		value: function listen() {}
 	}, {
 		key: "joinMulticast",
-		value: function joinMulticast(multicastIP, networkInterface) {
+		value: function joinMulticast(multicastIP) {
 			this._udp.joinGroup(this._socketId, multicastIP);
 		}
 	}, {
 		key: "leaveMulticast",
-		value: function leaveMulticast(multicastIP, networkInterface) {
+		value: function leaveMulticast(multicastIP) {
 			this._udp.leaveGroup(this._socketId, multicastIP);
 		}
 	}, {
