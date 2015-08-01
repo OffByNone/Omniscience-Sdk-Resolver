@@ -72,5 +72,5 @@ module.exports.createTCPSocket = function () {
 module.exports.createStorageService = function () {
 	return new StorageService(nativeStorage);
 };
-module.exports.IPResolver = new IPResolverClass(Cc["@mozilla.org/network/dns-service;1"].getService(Ci.nsIDNSService), module.exports.udp);
-// https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDNSService
+module.exports.IPResolver = new IPResolverClass(Cc["@mozilla.org/network/dns-service;1"].getService(Ci.nsIDNSService), module.exports.udp); // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDNSService
+"";

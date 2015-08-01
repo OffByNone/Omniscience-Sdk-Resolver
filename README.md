@@ -20,3 +20,6 @@ Currently working in Chrome:
 Not yet working in Chrome:
 	FileUtilities
 	TCPSocket
+
+
+On windows 8.1 kill services upnphost and SSDPSRV to allow the passive searcher to bind in chrome

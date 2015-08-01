@@ -8,18 +8,20 @@ var UDPSocket = (function () {
 	function UDPSocket(nativeSocket, scriptSecurityManager) {
 		_classCallCheck(this, UDPSocket);
 
-		this._nativeSocket = nativeSocket; // http://dxr.mozilla.org/mozilla-central/source/netwerk/base/public/nsIUDPSocket.idl
+		this._nativeSocket = nativeSocket; // https://dxr.mozilla.org/comm-central/source/mozilla/netwerk/base/nsIUDPSocket.idl
 		this._scriptSecurityManager = scriptSecurityManager;
 	}
 
 	_createClass(UDPSocket, [{
 		key: "init",
-		value: function init(sourcePort) {
-			this._nativeSocket.init(sourcePort || -1, false, this._scriptSecurityManager);
-		}
-	}, {
-		key: "listen",
-		value: function listen() {
+		value: function init(localPort, localIP, multicastIP) {
+			this.localIP = localIP;
+			this.localPort = localPort;
+			this.multicastIP = multicastIP;
+			console.log(localIP + ":" + localPort + "--" + multicastIP);
+			this._nativeSocket.init(localPort || -1, false, this._scriptSecurityManager, true);
+			this._nativeSocket.multicastInterface = localIP;
+			this._nativeSocket.joinMulticast(multicastIP, localIP);
 			this._nativeSocket.asyncListen(this);
 		}
 	}, {
@@ -33,31 +35,20 @@ var UDPSocket = (function () {
 			this._nativeSocket.close();
 		}
 	}, {
-		key: "joinMulticast",
-		value: function joinMulticast(multicastIP, myIP) {
-			this._nativeSocket.joinMulticast(multicastIP, myIP);
-		}
-	}, {
 		key: "leaveMulticast",
 		value: function leaveMulticast(multicastIP, myIP) {
 			this._nativeSocket.leaveMulticast(multicastIP, myIP);
 		}
 	}, {
-		key: "bind",
-		value: function bind(ipAddress) {
-			this._ipAddress = ipAddress;
-			this._nativeSocket.multicastInterface = ipAddress;
-		}
-	}, {
 		key: "onStopListening",
 		value: function onStopListening(socket, status) {
-			this._stopListeningEventHandler(status);
+			if (typeof this._stopListeningEventHandler === "function") this._stopListeningEventHandler(status);
 		}
 	}, {
 		key: "onPacketReceived",
 		value: function onPacketReceived(socket, message) {
 			// See: https://bugzilla.mozilla.org/show_bug.cgi?id=952927
-			this._packetReceivedEventHandler(message);
+			if (typeof this._packetReceivedEventHandler === "function") this._packetReceivedEventHandler(message);
 		}
 	}, {
 		key: "onStopListeningEvent",

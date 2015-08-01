@@ -22,17 +22,15 @@ var UDPSocket = (function () {
 		value: function init(localPort, localIP, multicastIP) {
 			var _this = this;
 
-			this._localPort = localPort || 0;
-			this._localIP = localIP;
-			this._multicastIP = multicastIP;
+			this.localPort = localPort || 0;
+			this.localIP = localIP;
+			this.multicastIP = multicastIP;
 
 			this._udp.create({ bufferSize: Constants.socketBufferSize }, function (createInfo) {
 				_this._socketId = createInfo.socketId;
-				console.log(localIP + ":" + _this._localPort);
-				_this._udp.bind(_this._socketId, localIP, _this._localPort, function (result) {
-					console.log(result);
+				_this._udp.bind(_this._socketId, localIP, _this.localPort, function (result) {
 					if (result >= 0) {
-						_this._udp.joinGroup(_this._socketId, _this._multicastIP, function () {
+						_this._udp.joinGroup(_this._socketId, _this.multicastIP, function () {
 							_this._initialized = true;
 							_this._sendQueue.forEach(function (queuedMessage) {
 								return _this._udp.send(_this._socketId, queuedMessage.message.buffer, queuedMessage.destinationIP, queuedMessage.destinationPort, function () {});
@@ -53,12 +51,9 @@ var UDPSocket = (function () {
 			var _this2 = this;
 
 			this._udp.close(this._socketId, function () {
-				return _this2._stopListeningEventHandler();
+				if (typeof _this2._stopListeningEventHandler === "function") _this2._stopListeningEventHandler();
 			});
 		}
-	}, {
-		key: "listen",
-		value: function listen() {}
 	}, {
 		key: "onStopListeningEvent",
 		value: function onStopListeningEvent(callback) {
