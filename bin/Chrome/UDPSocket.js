@@ -13,49 +13,52 @@ var UDPSocket = (function () {
 		_classCallCheck(this, UDPSocket);
 
 		this._udp = udp;
+		this._initialized = false;
+		this._sendQueue = [];
 	}
 
 	_createClass(UDPSocket, [{
 		key: "init",
-		value: function init(sourcePort) {
+		value: function init(localPort, localIP, multicastIP) {
 			var _this = this;
 
-			this._port = sourcePort;
+			this._localPort = localPort || 0;
+			this._localIP = localIP;
+			this._multicastIP = multicastIP;
+
 			this._udp.create({ bufferSize: Constants.socketBufferSize }, function (createInfo) {
 				_this._socketId = createInfo.socketId;
-				console.log(createInfo);
+				console.log(localIP + ":" + _this._localPort);
+				_this._udp.bind(_this._socketId, localIP, _this._localPort, function (result) {
+					console.log(result);
+					if (result >= 0) {
+						_this._udp.joinGroup(_this._socketId, _this._multicastIP, function () {
+							_this._initialized = true;
+							_this._sendQueue.forEach(function (queuedMessage) {
+								return _this._udp.send(_this._socketId, queuedMessage.message.buffer, queuedMessage.destinationIP, queuedMessage.destinationPort, function () {});
+							});
+						});
+					}
+				});
 			});
-		}
-	}, {
-		key: "bind",
-		value: function bind(ipAddress) {
-			this._ipAddress = ipAddress;
-			console.log(this._socketId);
-			this._udp.bind(this._socketId, ipAddress, this._port || 0);
 		}
 	}, {
 		key: "send",
 		value: function send(destinationIP, destinationPort, message) {
-			this._udp.send(this._socketId, message, destinationIP, destinationPort);
+			if (!this._initialized) this._sendQueue.push({ destinationIP: destinationIP, destinationPort: destinationPort, message: message });else this._udp.send(this._socketId, message.buffer, destinationIP, destinationPort, function () {});
 		}
 	}, {
 		key: "close",
 		value: function close() {
-			this._udp.close(this._socketId, this._stopListeningEventHandler);
+			var _this2 = this;
+
+			this._udp.close(this._socketId, function () {
+				return _this2._stopListeningEventHandler();
+			});
 		}
 	}, {
 		key: "listen",
 		value: function listen() {}
-	}, {
-		key: "joinMulticast",
-		value: function joinMulticast(multicastIP) {
-			this._udp.joinGroup(this._socketId, multicastIP);
-		}
-	}, {
-		key: "leaveMulticast",
-		value: function leaveMulticast(multicastIP) {
-			this._udp.leaveGroup(this._socketId, multicastIP);
-		}
 	}, {
 		key: "onStopListeningEvent",
 		value: function onStopListeningEvent(callback) {
@@ -64,10 +67,10 @@ var UDPSocket = (function () {
 	}, {
 		key: "onPacketReceivedEvent",
 		value: function onPacketReceivedEvent(callback) {
-			var _this2 = this;
+			var _this3 = this;
 
 			this._udp.onReceive.addListener(function (info) {
-				if (info.socketId == _this2._socketId) {
+				if (info.socketId == _this3._socketId) {
 					var message = {
 						data: info.data,
 						fromAddr: {

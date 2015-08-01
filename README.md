@@ -4,4 +4,19 @@
 
 Determines which SDK to use, and returns said SDK with shims to allow Omniscience to run in different environments.
 
-Currently only works with Firefox.
+Works in Firefox.
+
+Chrome implementation has begun!
+
+Currently working in Chrome:
+	StorageService (using chrome.storage.local AKA non syncing storage as chrome.storage.sync has different size limitations which were being exceeded)
+	UrlSdk
+	UDPSocket (there are limitations) http://stackoverflow.com/questions/14388706/socket-options-so-reuseaddr-and-so-reuseport-how-do-they-differ-do-they-mean-t
+	IPResolver (there is a different chrome specific way to do this that might be better, which uses something from the networking namespace)
+	Notifications (IconUrl must either be local or a data-uri)
+	XMLHttpRequest
+	timers
+	DomParser
+Not yet working in Chrome:
+	FileUtilities
+	TCPSocket

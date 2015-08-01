@@ -6,6 +6,7 @@ var UDP = require('./UDPSocket');
 var TCP = require('./TCPSocket');
 var IPResolverClass = require('./IPResolver');
 var FileUtilitiesClass = require('./FileUtilities');
+var UrlSdk = require('./UrlSdk');
 //const windowUtils = require('sdk/window/utils'); // https://developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs/window_utils
 //const fileSystem = {
 //	createLocalFile: () => Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsILocalFile), // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsILocalFile
@@ -31,10 +32,10 @@ module.exports.timers = function () {
   return window;
 };
 module.exports.url = function () {
-  return window.URL;
+  return new UrlSdk(window.URL);
 };
 module.exports.createDomParser = function () {
-  return window.DOMParser;
+  return new window.DOMParser();
 };
 module.exports.createStorageService = function () {
   return require('./StorageService');
