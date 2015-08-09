@@ -9,10 +9,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Constants = require("../Constants");
 
 var UDPSocket = (function () {
-	function UDPSocket(udp) {
+	function UDPSocket(udp, lastError) {
 		_classCallCheck(this, UDPSocket);
 
 		this._udp = udp;
+		this._lastError = lastError;
+
 		this._initialized = false;
 		this._sendQueue = [];
 	}
@@ -29,14 +31,20 @@ var UDPSocket = (function () {
 			this._udp.create({ bufferSize: Constants.socketBufferSize }, function (createInfo) {
 				_this._socketId = createInfo.socketId;
 				_this._udp.bind(_this._socketId, localIP, _this.localPort, function (result) {
-					if (result >= 0) {
-						_this._udp.joinGroup(_this._socketId, _this.multicastIP, function () {
-							_this._initialized = true;
-							_this._sendQueue.forEach(function (queuedMessage) {
-								return _this._udp.send(_this._socketId, queuedMessage.message.buffer, queuedMessage.destinationIP, queuedMessage.destinationPort, function () {});
-							});
-						});
+					console.log(localIP + ":" + _this.localPort);
+					console.log(result);
+
+					if (result < 0) {
+						/* console.log(this._lastError.message);*/
+						return;
 					}
+
+					_this._udp.joinGroup(_this._socketId, _this.multicastIP, function () {
+						_this._initialized = true;
+						_this._sendQueue.forEach(function (queuedMessage) {
+							return _this._udp.send(_this._socketId, queuedMessage.message.buffer, queuedMessage.destinationIP, queuedMessage.destinationPort, function () {});
+						});
+					});
 				});
 			});
 		}

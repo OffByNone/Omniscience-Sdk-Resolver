@@ -14,7 +14,11 @@ var StorageService = (function () {
 	_createClass(StorageService, [{
 		key: "get",
 		value: function get(key) {
-			return this._nativeStorage[key];
+			var _this = this;
+
+			return new Promise(function (resolve, reject) {
+				resolve(_this._nativeStorage[key]);
+			});
 		}
 	}, {
 		key: "set",

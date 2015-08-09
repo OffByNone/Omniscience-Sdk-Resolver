@@ -39,7 +39,7 @@ var SimpleTCPSocket = (function () {
 			var _this2 = this;
 
 			return new Promise(function (resolve, reject) {
-				//todo: maybe add a timeout?
+				/*todo: maybe add a timeout?*/
 				var resolved = false;
 				var socket = _this2._tcpSocketProvider.create().open(ip, port);
 				socket.onopen(function () {
@@ -68,7 +68,7 @@ var SimpleTCPSocket = (function () {
 	}, {
 		key: '_ondata',
 		value: function _ondata(dataReceived, socket, resolve) {
-			//todo: this will only work when the entire response fits into a single packet, need to loop over this and parse it like in the HttpRequestParser, only different
+			/*todo: this will only work when the entire response fits into a single packet, need to loop over this and parse it like in the HttpRequestParser, only different*/
 			socket.close();
 			resolve(dataReceived);
 		}
@@ -79,6 +79,7 @@ var SimpleTCPSocket = (function () {
 
 module.exports = SimpleTCPSocket;
 
-//todo: if the error is anything other than the socket is already closed, throw
-//already closed, meaning we already got the response
-//nothing to see here, move along
+/* todo: if the error is anything other than the socket is already closed, throw
+ * already closed, meaning we already got the response
+ * nothing to see here, move along
+ */

@@ -4,9 +4,13 @@
 
 var UDP = require('./UDPSocket');
 var TCP = require('./TCPSocket');
+var SimpleTCPSocket = require('./SimpleTCPSocket');
+var SimpleTCP = require('../SimpleTCP');
+
 var IPResolverClass = require('./IPResolver');
 var FileUtilitiesClass = require('./FileUtilities');
 var UrlSdk = require('./UrlSdk');
+
 //const windowUtils = require('sdk/window/utils'); // https://developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs/window_utils
 //const fileSystem = {
 //	createLocalFile: () => Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsILocalFile), // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsILocalFile
@@ -19,11 +23,14 @@ var UrlSdk = require('./UrlSdk');
 
 module.exports.IPResolver = new IPResolverClass();
 module.exports.createUDPSocket = function () {
-  return new UDP(chrome.sockets.udp);
+  return new UDP(chrome.sockets.udp, chrome.runtime.lastError);
 }; // https://developer.chrome.com/apps/sockets_udp
 module.exports.createTCPSocket = function () {
   return new TCP(chrome.sockets.tcp, chrome.sockets.tcpServer);
 }; // https://developer.chrome.com/apps/sockets_tcp  https://developer.chrome.com/apps/sockets_tcpServer
+module.exports.createSimpleTCP = function () {
+  return new SimpleTCP(new SimpleTCPSocket(window, chrome.sockets.tcp, chrome.runtime.lastError));
+};
 
 module.exports.XMLHttpRequest = function () {
   return window.XMLHttpRequest;
@@ -43,5 +50,6 @@ module.exports.createStorageService = function () {
 module.exports.notifications = function () {
   return require('./Notifications');
 };
+
 module.exports.isFirefox = false;
 module.exports.isChrome = true;
