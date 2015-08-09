@@ -23,6 +23,10 @@ var IPResolverClass = require("./IPResolver");
 var FileUtilitiesClass = require("./FileUtilities");
 var TCPSocket = require("./TCPSocket");
 var StorageService = require("./StorageService");
+var SimpleTCPSocketClass = require("./SimpleTCPSocket");
+var SocketSenderClass = require("./SocketSender.js");
+var SimpleTCP = require("../SimpleTCP");
+
 var nativeStorage = require("sdk/simple-storage").storage;
 
 var windowUtils = require("sdk/window/utils"); // https://developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs/window_utils
@@ -66,11 +70,22 @@ module.exports.FileUtilities = new FileUtilitiesClass(fileSystem, windowUtils);
 module.exports.createUDPSocket = function () {
 	return new UDPSocket(Cc["@mozilla.org/network/udp-socket;1"].createInstance(Ci.nsIUDPSocket), Services.scriptSecurityManager.getSystemPrincipal());
 };
-module.exports.createTCPSocket = function () {
-	return new TCPSocket(Cc["@mozilla.org/tcp-socket;1"].createInstance(Ci.nsIDOMTCPSocket));
-}; //https://dxr.mozilla.org/mozilla-central/source/dom/network/interfaces/nsIDOMTCPSocket.idl
 module.exports.createStorageService = function () {
 	return new StorageService(nativeStorage);
 };
 module.exports.IPResolver = new IPResolverClass(Cc["@mozilla.org/network/dns-service;1"].getService(Ci.nsIDNSService), module.exports.udp); // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDNSService
+module.exports.RawTCPProvider = { create: function create() {
+		return new TCPSocket(Cc["@mozilla.org/tcp-socket;1"].createInstance(Ci.nsIDOMTCPSocket));
+	} };
+module.exports.createSimpleTCP = function () {
+	return new SimpleTCP(module.exports.SimpleTCPSocket());
+};
+module.exports.createSocketSender = function () {
+	return new SocketSenderClass();
+};
+module.exports.SimpleTCPSocket = function () {
+	return new SimpleTCPSocketClass(module.exports.timers(), module.exports.RawTCPProvider, new SocketSenderClass());
+};
+module.exports.isFirefox = true;
+module.exports.isChrome = false;
 "";

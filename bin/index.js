@@ -14,7 +14,6 @@ var SdkResolver = (function () {
 		value: function resolve() {
 			var sdk = undefined;
 			if (typeof window === 'undefined') sdk = require('./Firefox/AddonSdk');else sdk = require('./Chrome/sdk');
-
 			return sdk;
 		}
 	}]);
