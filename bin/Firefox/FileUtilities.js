@@ -8,11 +8,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Constants = require("../Constants");
 
 var FileUtilities = (function () {
-    function FileUtilities(fileSystem, windowUtilities) {
+    function FileUtilities(fileSystem, windowUtilities, mimeService) {
         _classCallCheck(this, FileUtilities);
 
         this._fileSystem = fileSystem;
         this._windowUtilities = windowUtilities;
+        this._mimeService = mimeService;
     }
 
     _createClass(FileUtilities, [{
@@ -26,16 +27,24 @@ var FileUtilities = (function () {
     }, {
         key: "readBytes",
         value: function readBytes(filePath) {
-            return this._fileSystem.read(filePath);
+            var _this = this;
+
+            return new Promise(function (resolve, reject) {
+                var file = _this.create(filePath);
+                _this._fileSystem.read(file.path).then(function (fileBytes) {
+                    var mimetype = _this._mimeService.getMimeType(file);
+                    resolve(fileBytes, mimetype);
+                });
+            });
         }
     }, {
         key: "openFileBrowser",
         value: function openFileBrowser() {
-            var _this = this;
+            var _this2 = this;
 
             return new Promise(function (resolve, reject) {
-                var filePicker = _this._fileSystem.filePicker();
-                filePicker.init(_this._windowUtilities.getMostRecentBrowserWindow(), Constants.addonSdk.filePicker.windowTitle, Constants.addonSdk.filePicker.modeOpenMultiple);
+                var filePicker = _this2._fileSystem.filePicker();
+                filePicker.init(_this2._windowUtilities.getMostRecentBrowserWindow(), Constants.addonSdk.filePicker.windowTitle, Constants.addonSdk.filePicker.modeOpenMultiple);
                 filePicker.appendFilters(Constants.addonSdk.filePicker.filterAll);
 
                 filePicker.open(function (result) {
@@ -43,11 +52,11 @@ var FileUtilities = (function () {
                         var filePickerFiles = filePicker.files;
                         var files = [];
                         while (filePickerFiles.hasMoreElements()) {
-                            var file = _this.create(filePickerFiles.getNext());
+                            var file = _this2.create(filePickerFiles.getNext());
                             var fileInfo = {
                                 path: file.path,
                                 name: file.leafName,
-                                type: _this.getMimeType(file)
+                                type: _this2.getMimeType(file)
                             };
 
                             files.push(fileInfo);
@@ -56,26 +65,6 @@ var FileUtilities = (function () {
                     } else reject(Constants.addonSdk.filePicker.noFilesChosen);
                 });
             });
-        }
-    }, {
-        key: "getMimeType",
-        value: function getMimeType(file) {
-            /*
-             * From Mozilla
-            * Gets a content-type for the given file, by
-            * asking the global MIME service for a content-type, and finally by failing
-            * over to application/octet-stream.
-            *
-            * @param file : nsIFile
-            * the nsIFile for which to get a file type
-            * @returns string
-            * the best content-type which can be determined for the file
-            */
-            try {
-                return this._fileSystem.getTypeFromFile(file);
-            } catch (e) {
-                return Constants.defaultMimeType;
-            }
         }
     }]);
 

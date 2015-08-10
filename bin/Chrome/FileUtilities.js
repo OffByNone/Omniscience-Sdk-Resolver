@@ -1,85 +1,77 @@
+
 /* global Promise */
-"use strict";
+'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var Constants = require("../Constants");
+var Constants = require('../Constants');
 
 var FileUtilities = (function () {
-    function FileUtilities(fileSystem, windowUtilities) {
-        _classCallCheck(this, FileUtilities);
+	function FileUtilities(mimeService) {
+		_classCallCheck(this, FileUtilities);
 
-        this._fileSystem = fileSystem;
-        this._windowUtilities = windowUtilities;
-    }
+		this._fileSystem = chrome.app.window.get('omniscience').contentWindow.chrome.fileSystem;
+		this._mimeService = mimeService;
+		this._openedFiles = {};
+	}
 
-    _createClass(FileUtilities, [{
-        key: "create",
-        value: function create(fileInfo) {
-            var file = this._fileSystem.createLocalFile();
-            if (typeof fileInfo === "string") file.initWithPath(fileInfo);
-            if (typeof fileInfo === "object") file.initWithFile(fileInfo);
-            return file;
-        }
-    }, {
-        key: "readBytes",
-        value: function readBytes(filePath) {
-            return this._fileSystem.read(filePath);
-        }
-    }, {
-        key: "openFileBrowser",
-        value: function openFileBrowser() {
-            var _this = this;
+	_createClass(FileUtilities, [{
+		key: 'readBytes',
+		value: function readBytes(filePath) {
+			var _this = this;
 
-            return new Promise(function (resolve, reject) {
-                var filePicker = _this._fileSystem.filePicker();
-                filePicker.init(_this._windowUtilities.getMostRecentBrowserWindow(), Constants.addonSdk.filePicker.windowTitle, Constants.addonSdk.filePicker.modeOpenMultiple);
-                filePicker.appendFilters(Constants.addonSdk.filePicker.filterAll);
+			return new Promise(function (resolve, reject) {
+				_this._fileSystem.restoreEntry(_this._openedFiles[filePath], function (entry) {
+					entry.file(function (file) {
+						var reader = new FileReader();
 
-                filePicker.open(function (result) {
-                    if (result === Constants.addonSdk.filePicker.returnOK) {
-                        var filePickerFiles = filePicker.files;
-                        var files = [];
-                        while (filePickerFiles.hasMoreElements()) {
-                            var file = _this.create(filePickerFiles.getNext());
-                            var fileInfo = {
-                                path: file.path,
-                                name: file.leafName,
-                                type: _this.getMimeType(file)
-                            };
+						reader.onerror = function (err) {
+							return reject(err);
+						};
+						reader.onloadend = function (event) {
+							return resolve(event.target.result);
+						};
+						reader.readAsArrayBuffer(file);
+					});
+					resolve(entry, _this._mimeService(entry.name));
+				});
+			});
+		}
+	}, {
+		key: 'openFileBrowser',
+		value: function openFileBrowser() {
+			var _this2 = this;
 
-                            files.push(fileInfo);
-                        }
-                        resolve(files);
-                    } else reject(Constants.addonSdk.filePicker.noFilesChosen);
-                });
-            });
-        }
-    }, {
-        key: "getMimeType",
-        value: function getMimeType(file) {
-            /*
-             * From Mozilla
-            * Gets a content-type for the given file, by
-            * asking the global MIME service for a content-type, and finally by failing
-            * over to application/octet-stream.
-            *
-            * @param file : nsIFile
-            * the nsIFile for which to get a file type
-            * @returns string
-            * the best content-type which can be determined for the file
-            */
-            try {
-                return this._fileSystem.getTypeFromFile(file);
-            } catch (e) {
-                return Constants.defaultMimeType;
-            }
-        }
-    }]);
+			return new Promise(function (resolve, reject) {
+				_this2._fileSystem.chooseEntry({
+					type: Constants.chromeSdk.filePicker.open,
+					/*accepts: [Constants.chromeSdk.filePicker.filterAll],*/
+					acceptsMultiple: true
+				}, function (fileEntries) {
+					var files = [];
+					fileEntries.forEach(function (file, index) {
+						_this2._fileSystem.getDisplayPath(file, function (filePath) {
+							var fileInfo = {
+								path: filePath,
+								name: file.name,
+								type: _this2._mimeService.getMimeType(file)
+							};
+							files.push(fileInfo);
 
-    return FileUtilities;
+							var fileId = _this2._fileSystem.retainEntry(file);
+							_this2._openedFiles[filePath] = fileId;
+
+							if (index === fileEntries.length - 1) resolve(files); //final time through loop resolve the promise
+						});
+					});
+				});
+			});
+		}
+	}]);
+
+	return FileUtilities;
 })();
 
 module.exports = FileUtilities;

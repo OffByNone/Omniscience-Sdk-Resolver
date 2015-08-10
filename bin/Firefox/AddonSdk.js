@@ -18,13 +18,14 @@ var _Cu$import2 = Cu["import"]("resource://gre/modules/osfile.jsm");
 var OS = _Cu$import2.OS;
 // https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/OSFile.jsm
 
+var MimeService = require("./MimeService");
 var UDPSocket = require("./UDPSocket");
-var IPResolverClass = require("./IPResolver");
-var FileUtilitiesClass = require("./FileUtilities");
+var IPResolver = require("./IPResolver");
+var FileUtilities = require("./FileUtilities");
 var TCPSocket = require("./TCPSocket");
 var StorageService = require("./StorageService");
-var SimpleTCPSocketClass = require("./SimpleTCPSocket");
-var SocketSenderClass = require("./SocketSender.js");
+var SimpleTCPSocket = require("./SimpleTCPSocket");
+var SocketSender = require("./SocketSender.js");
 var SimpleTCP = require("../SimpleTCP");
 
 var nativeStorage = require("sdk/simple-storage").storage;
@@ -66,26 +67,34 @@ module.exports.getNativeWindowMenu = function () {
 	return Services.wm.getMostRecentWindow("navigator:browser").NativeWindow.menu;
 }; //for firefox for android
 
-module.exports.FileUtilities = new FileUtilitiesClass(fileSystem, windowUtils);
+module.exports.createFileUtilities = function () {
+	return new FileUtilities(fileSystem, windowUtils, new MimeService(Cc["@mozilla.org/uriloader/external-helper-app-service;1"].getService(Ci.nsIMIMEService)));
+};
 module.exports.createUDPSocket = function () {
 	return new UDPSocket(Cc["@mozilla.org/network/udp-socket;1"].createInstance(Ci.nsIUDPSocket), Services.scriptSecurityManager.getSystemPrincipal());
 };
 module.exports.createStorageService = function () {
 	return new StorageService(nativeStorage);
 };
-module.exports.IPResolver = new IPResolverClass(Cc["@mozilla.org/network/dns-service;1"].getService(Ci.nsIDNSService), module.exports.udp); // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDNSService
-module.exports.RawTCPProvider = { create: function create() {
+module.exports.createIPResolver = function () {
+	return new IPResolver(Cc["@mozilla.org/network/dns-service;1"].getService(Ci.nsIDNSService), module.exports.createUDPSocket());
+}; // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDNSService
+
+module.exports.createRawTCPProvider = function () {
+	create: (function () {
 		return new TCPSocket(Cc["@mozilla.org/tcp-socket;1"].createInstance(Ci.nsIDOMTCPSocket));
-	} };
+	});
+};
 module.exports.createSimpleTCP = function () {
-	return new SimpleTCP(module.exports.SimpleTCPSocket());
+	return new SimpleTCP(module.exports.createSimpleTCPSocket());
 };
 module.exports.createSocketSender = function () {
-	return new SocketSenderClass();
+	return new SocketSender();
 };
-module.exports.SimpleTCPSocket = function () {
-	return new SimpleTCPSocketClass(module.exports.timers(), module.exports.RawTCPProvider, new SocketSenderClass());
+module.exports.createSimpleTCPSocket = function () {
+	return new SimpleTCPSocket(module.exports.timers(), module.exports.createRawTCPProvider(), new SocketSender());
 };
+
 module.exports.isFirefox = true;
 module.exports.isChrome = false;
 "";

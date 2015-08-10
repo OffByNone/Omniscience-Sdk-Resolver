@@ -6,22 +6,23 @@ var UDP = require('./UDPSocket');
 var TCP = require('./TCPSocket');
 var SimpleTCPSocket = require('./SimpleTCPSocket');
 var SimpleTCP = require('../SimpleTCP');
+var SocketSender = require('./SocketSender');
 
-var IPResolverClass = require('./IPResolver');
-var FileUtilitiesClass = require('./FileUtilities');
+var FileUtilities = require('./FileUtilities');
+var MimeService = require('./MimeService');
+var IPResolver = require('./IPResolver');
 var UrlSdk = require('./UrlSdk');
 
-//const windowUtils = require('sdk/window/utils'); // https://developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs/window_utils
-//const fileSystem = {
-//	createLocalFile: () => Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsILocalFile), // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsILocalFile
-//	filePicker: () => Cc["@mozilla.org/filepicker;1"].createInstance(Ci.nsIFilePicker), // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFilePicker
-//	mimeService: Cc["@mozilla.org/uriloader/external-helper-app-service;1"].getService(Ci.nsIMIMEService),
-//	read: OS.File
-//};
+module.exports.createIPResolver = function () {
+  return new IPResolver();
+};
+module.exports.createFileUtilities = function () {
+  return new FileUtilities(new MimeService());
+};
 
-//module.exports.FileUtilities = new FileUtilitiesClass(fileSystem, windowUtils);
-
-module.exports.IPResolver = new IPResolverClass();
+module.exports.createSocketSender = function () {
+  return new SocketSender(chrome.sockets.tcp);
+};
 module.exports.createUDPSocket = function () {
   return new UDP(chrome.sockets.udp, chrome.runtime.lastError);
 }; // https://developer.chrome.com/apps/sockets_udp
@@ -53,3 +54,7 @@ module.exports.notifications = function () {
 
 module.exports.isFirefox = false;
 module.exports.isChrome = true;
+
+module.exports.chromeTCP = chrome.sockets.tcp;
+module.exports.chromeTCPServer = chrome.sockets.tcpServer;
+module.exports.chromeFileSystem = chrome.fileSystem;
