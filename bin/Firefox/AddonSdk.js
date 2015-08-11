@@ -81,9 +81,9 @@ module.exports.createIPResolver = function () {
 }; // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDNSService
 
 module.exports.createRawTCPProvider = function () {
-	create: (function () {
-		return new TCPSocket(Cc["@mozilla.org/tcp-socket;1"].createInstance(Ci.nsIDOMTCPSocket));
-	});
+	return { create: function create() {
+			return new TCPSocket(Cc["@mozilla.org/tcp-socket;1"].createInstance(Ci.nsIDOMTCPSocket));
+		} };
 };
 module.exports.createSimpleTCP = function () {
 	return new SimpleTCP(module.exports.createSimpleTCPSocket());

@@ -9,10 +9,11 @@ var SimpleTCPSocket = (function () {
 	function SimpleTCPSocket(timers, tcpSocketProvider, socketSender) {
 		_classCallCheck(this, SimpleTCPSocket);
 
-		this.responseTimeout = 60000;
 		this._timers = timers;
 		this._tcpSocketProvider = tcpSocketProvider;
 		this._socketSender = socketSender;
+
+		this.responseTimeout = 60000;
 	}
 
 	_createClass(SimpleTCPSocket, [{

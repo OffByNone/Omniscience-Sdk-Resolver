@@ -56,7 +56,7 @@ var FileUtilities = (function () {
                             var fileInfo = {
                                 path: file.path,
                                 name: file.leafName,
-                                type: _this2.getMimeType(file)
+                                type: _this2._mimeService.getMimeType(file)
                             };
 
                             files.push(fileInfo);
