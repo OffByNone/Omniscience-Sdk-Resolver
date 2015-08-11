@@ -14,7 +14,13 @@ var FileUtilities = (function () {
 
 		this._fileSystem = chrome.app.window.get('omniscience').contentWindow.chrome.fileSystem;
 		this._mimeService = mimeService;
-		this._openedFiles = {};
+
+		//todo: this is all tech debt baby
+		window.omniscience = window.omniscience || {};
+		window.omniscience.FileUtilities = window.omniscience.FileUtilities || {};
+		window.omniscience.FileUtilities._openedFiles = window.omniscience.FileUtilities._openedFiles || {};
+
+		this._openedFiles = window.omniscience.FileUtilities._openedFiles;
 	}
 
 	_createClass(FileUtilities, [{
@@ -31,7 +37,7 @@ var FileUtilities = (function () {
 							return reject(err);
 						};
 						reader.onloadend = function (event) {
-							return resolve(event.target.result);
+							return resolve(new Uint8Array(event.target.result));
 						};
 						reader.readAsArrayBuffer(file);
 					});

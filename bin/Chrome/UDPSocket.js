@@ -31,9 +31,6 @@ var UDPSocket = (function () {
 			this._udp.create({ bufferSize: Constants.socketBufferSize }, function (createInfo) {
 				_this._socketId = createInfo.socketId;
 				_this._udp.bind(_this._socketId, localIP, _this.localPort, function (result) {
-					console.log(localIP + ":" + _this.localPort);
-					console.log(result);
-
 					if (result < 0) {
 						/* console.log(this._lastError.message);*/
 						return;
