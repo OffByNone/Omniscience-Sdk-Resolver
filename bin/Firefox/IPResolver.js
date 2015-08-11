@@ -39,17 +39,15 @@ var IPResolver = (function () {
         key: "_forceGetIPs",
         value: function _forceGetIPs(resolve) {
             var udpSocket = this._udpProvider.create();
-            udpSocket.joinMulticast(Constants.IPResolverMulticast);
 
-            udpSocket.asyncListen({
-                onPacketReceived: function onPacketReceived(socket, message) {
-                    // See: https://bugzilla.mozilla.org/show_bug.cgi?id=952927
-                    socket.close();
-                    resolve([message.fromAddr.address, "127.0.0.1"]);
-                }
+            udpSocket.onPacketReceivedEvent(function (socket, message) {
+                // See: https://bugzilla.mozilla.org/show_bug.cgi?id=952927
+                socket.close();
+                resolve([message.fromAddr.address, "127.0.0.1"]);
             });
+            udpSocket.init(-1, "0.0.0.0", Constants.IPResolverMulticast);
 
-            udpSocket.send(Constants.IPResolverMulticast, udpSocket.port, Constants.forceGetIPMessage, Constants.forceGetIPMessage.length);
+            udpSocket.send(Constants.IPResolverMulticast, udpSocket.localPort, Constants.forceGetIPMessage, Constants.forceGetIPMessage.length);
         }
     }]);
 
