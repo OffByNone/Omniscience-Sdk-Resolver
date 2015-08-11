@@ -15,6 +15,7 @@ var UrlSdk = (function () {
 		key: "isValidURI",
 		value: function isValidURI(path) {
 			try {
+				if (path instanceof URL) return true;
 				new (this._windowUrl(path))();
 				return true;
 			} catch (e) {
