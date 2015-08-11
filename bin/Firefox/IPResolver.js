@@ -8,11 +8,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Constants = require("../Constants");
 
 var IPResolver = (function () {
-    function IPResolver(dnsService, udp) {
+    function IPResolver(dnsService, udpProvider) {
         _classCallCheck(this, IPResolver);
 
         this._dnsService = dnsService;
-        this._udp = udp;
+        this._udpProvider = udpProvider;
     }
 
     _createClass(IPResolver, [{
@@ -38,7 +38,7 @@ var IPResolver = (function () {
     }, {
         key: "_forceGetIPs",
         value: function _forceGetIPs(resolve) {
-            var udpSocket = this._udp.createUDPSocket();
+            var udpSocket = this._udpProvider.create();
             udpSocket.joinMulticast(Constants.IPResolverMulticast);
 
             udpSocket.asyncListen({
