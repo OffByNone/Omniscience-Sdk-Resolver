@@ -37,11 +37,10 @@ var FileUtilities = (function () {
 							return reject(err);
 						};
 						reader.onloadend = function (event) {
-							return resolve(new Uint8Array(event.target.result));
+							return resolve(new Uint8Array(event.target.result), _this._mimeService.getMimeType(entry));
 						};
 						reader.readAsArrayBuffer(file);
 					});
-					resolve(entry, _this._mimeService(entry.name));
 				});
 			});
 		}
