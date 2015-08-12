@@ -16,13 +16,14 @@ var UDPSocket = (function () {
 		key: "init",
 		value: function init(localPort, localIP, multicastIP) {
 			this.localIP = localIP;
-			this.localPort = localPort;
 			this.multicastIP = multicastIP;
 
 			this._nativeSocket.init(localPort || -1, false, this._scriptSecurityManager, true);
 			this._nativeSocket.multicastInterface = localIP;
 			this._nativeSocket.joinMulticast(multicastIP, localIP);
 			this._nativeSocket.asyncListen(this);
+
+			this.localPort = this._nativeSocket.port;
 		}
 	}, {
 		key: "send",
