@@ -77,9 +77,11 @@ module.exports.createStorageService = function () {
 	return new StorageService(nativeStorage);
 };
 module.exports.createIPResolver = function () {
-	return new IPResolver(Cc["@mozilla.org/network/dns-service;1"].getService(Ci.nsIDNSService), { create: function create() {
+	return new IPResolver(Cc["@mozilla.org/network/dns-service;1"].getService(Ci.nsIDNSService), {
+		create: function create() {
 			return module.exports.createUDPSocket();
-		} });
+		}
+	});
 }; // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDNSService
 
 module.exports.createRawTCPProvider = function () {
