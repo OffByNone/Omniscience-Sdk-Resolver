@@ -9,77 +9,116 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Constants = require("../Constants");
 
 var UDPSocket = (function () {
-	function UDPSocket(udp, lastError) {
+	function UDPSocket(chromeUdp) {
 		_classCallCheck(this, UDPSocket);
 
-		this._udp = udp;
-		this._lastError = lastError;
-
-		this._initialized = false;
-		this._sendQueue = [];
+		this._chromeUdp = chromeUdp;
+		this.socketId;
 	}
 
 	_createClass(UDPSocket, [{
-		key: "init",
-		value: function init(localPort, localIP, multicastIP) {
+		key: "create",
+		value: function create(properties) {
 			var _this = this;
 
-			this.localPort = localPort || 0;
-			this.localIP = localIP;
-			this.multicastIP = multicastIP;
+			return new Promise(function (resolve, reject) {
+				_this._chromeUdp.create(properties, function (createInfo) {
+					_this.socketId = createInfo.socketId;
+					resolve(createInfo.socketId);
+				});
+			});
+		}
+	}, {
+		key: "bind",
+		value: function bind(localAddress, localPort) {
+			var _this2 = this;
 
-			this._udp.create({ bufferSize: Constants.socketBufferSize }, function (createInfo) {
-				_this._socketId = createInfo.socketId;
-				_this._udp.bind(_this._socketId, localIP, _this.localPort, function (result) {
-					if (result < 0) {
-						/* console.log(this._lastError.message);*/
-						return;
-					}
-
-					_this._udp.joinGroup(_this._socketId, _this.multicastIP, function () {
-						_this._initialized = true;
-						_this._sendQueue.forEach(function (queuedMessage) {
-							return _this._udp.send(_this._socketId, queuedMessage.message.buffer, queuedMessage.destinationIP, queuedMessage.destinationPort, function () {});
-						});
-					});
+			return new Promise(function (resolve, reject) {
+				_this2._chromeUdp.bind(_this2.socketId, localAddress, localPort || 0, function (result) {
+					if (result < 0) reject(result);else resolve(result);
 				});
 			});
 		}
 	}, {
 		key: "send",
-		value: function send(destinationIP, destinationPort, message) {
-			if (!this._initialized) this._sendQueue.push({ destinationIP: destinationIP, destinationPort: destinationPort, message: message });else this._udp.send(this._socketId, message.buffer, destinationIP, destinationPort, function () {});
+		value: function send(data, remoteAddress, remotePort) {
+			var _this3 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this3._chromeUdp.send(_this3.socketId, data, remoteAddress, remotePort, function (sendInfo) {
+					if (sendInfo.resultCode < 0) reject(sendInfo.resultCode);else resolve(sendInfo.resultCode, sendInfo.bytesSent);
+				});
+			});
 		}
 	}, {
 		key: "close",
 		value: function close() {
-			var _this2 = this;
+			var _this4 = this;
 
-			this._udp.close(this._socketId, function () {
-				if (typeof _this2._stopListeningEventHandler === "function") _this2._stopListeningEventHandler();
+			return new Promise(function (resolve, reject) {
+				_this4._chromeUdp.close(_this4.socketId, function () {
+					resolve();
+				});
 			});
 		}
 	}, {
-		key: "onStopListeningEvent",
-		value: function onStopListeningEvent(callback) {
-			this._stopListeningEventHandler = callback;
+		key: "joinGroup",
+		value: function joinGroup(groupAddress) {
+			var _this5 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this5._chromeUdp.joinGroup(_this5.socketId, groupAddress, function (result) {
+					if (result < 0) reject(result);else resolve(result);
+				});
+			});
 		}
 	}, {
-		key: "onPacketReceivedEvent",
-		value: function onPacketReceivedEvent(callback) {
-			var _this3 = this;
+		key: "setMulticastLoopbackMode",
+		value: function setMulticastLoopbackMode(enabled) {
+			var _this6 = this;
 
-			this._udp.onReceive.addListener(function (info) {
-				if (info.socketId == _this3._socketId) {
-					var message = {
-						data: info.data,
-						fromAddr: {
-							address: info.remoteAddress,
-							port: info.remotePort
-						}
-					};
-					callback(message);
-				}
+			return new Promise(function (resolve, reject) {
+				_this6._chromeUdp.setMulticastLoopbackMode(_this6.socketId, enabled, function (result) {
+					resolve(result);
+				});
+			});
+		}
+	}, {
+		key: "getInfo",
+		value: function getInfo() {
+			var _this7 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this7._chromeUdp.getInfo(_this7.socketId, function (socketInfo) {
+					resolve(socketInfo);
+				});
+			});
+		}
+	}, {
+		key: "onReceive",
+		value: function onReceive(callback) {
+			var _this8 = this;
+
+			this._chromeUdp.onReceive.addListener(function (info) {
+				if (_this8.socketId !== info.socketId) return;
+				var message = {
+					data: info.data,
+					fromAddr: {
+						address: info.remoteAddress,
+						port: info.remotePort
+					}
+				};
+				callback(message);
+			});
+		}
+	}, {
+		key: "onReceiveError",
+		value: function onReceiveError(callback) {
+			var _this9 = this;
+
+			this._chromeUdp.onReceiveError.addListener(function (info) {
+				if (_this9.socketId !== info.socketId) return;
+				callback(info.socketId, info.resultCode);
 			});
 		}
 	}]);

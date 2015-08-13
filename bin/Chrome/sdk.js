@@ -4,6 +4,7 @@
 
 var UDP = require('./UDPSocket');
 var TCP = require('./TCPSocket');
+var SimpleUDPSocket = require('./SimpleUDPSocket');
 var SimpleTCPSocket = require('./SimpleTCPSocket');
 var SimpleTCP = require('../SimpleTCP');
 var SocketSender = require('./SocketSender');
@@ -24,7 +25,9 @@ module.exports.createSocketSender = function () {
   return new SocketSender(chrome.sockets.tcp);
 };
 module.exports.createUDPSocket = function () {
-  return new UDP(chrome.sockets.udp, chrome.runtime.lastError);
+  return new SimpleUDPSocket({ create: function create() {
+      return new UDP(chrome.sockets.udp, chrome.runtime.lastError);
+    } });
 }; // https://developer.chrome.com/apps/sockets_udp
 module.exports.createTCPSocket = function () {
   return new TCP(chrome.sockets.tcp, chrome.sockets.tcpServer);

@@ -17,16 +17,15 @@ var IPResolver = (function () {
 		value: function resolveIPs() {
 			return new Promise(function (resolve, reject) {
 				chrome.system.network.getNetworkInterfaces(function (interfaces) {
-					return (
-						/* for IPv6 support see https://en.wikipedia.org/wiki/Simple_Service_Discovery_Protocol#Protocol_transport_and_addressing */
-						resolve(interfaces.filter(function (_ref) {
-							var address = _ref.address;
-							return Constants.ipv4Regex.test(address);
-						}).map(function (_ref2) {
-							var address = _ref2.address;
-							return address;
-						}))
-					);
+					interfaces.push("127.0.0.1");
+					/* for IPv6 support see https://en.wikipedia.org/wiki/Simple_Service_Discovery_Protocol#Protocol_transport_and_addressing */
+					resolve(interfaces.filter(function (_ref) {
+						var address = _ref.address;
+						return Constants.ipv4Regex.test(address);
+					}).map(function (_ref2) {
+						var address = _ref2.address;
+						return address;
+					}));
 				});
 			});
 		}
