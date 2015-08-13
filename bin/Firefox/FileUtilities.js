@@ -29,12 +29,10 @@ var FileUtilities = (function () {
         value: function readBytes(filePath) {
             var _this = this;
 
-            return new Promise(function (resolve, reject) {
-                var file = _this.create(filePath);
-                _this._fileSystem.read(file.path).then(function (fileBytes) {
-                    var mimetype = _this._mimeService.getMimeType(file);
-                    resolve(fileBytes, mimetype);
-                });
+            var file = this.create(filePath);
+            return this._fileSystem.read(file.path).then(function (fileBytes) {
+                var mimetype = _this._mimeService.getMimeType(file);
+                return { fileBytes: fileBytes, mimetype: mimetype };
             });
         }
     }, {
