@@ -1,9 +1,24 @@
 /* global chrome */
 /* global Promise */
-'use strict';
+"use strict";
 
 var UDP = require('./UDPSocket');
 var TCP = require('./TCPSocket');
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+var IPResolverClass = require('./IPResolver');
+var FileUtilitiesClass = require('./FileUtilities');
+var UrlSdk = require("./UrlSdk");
+//const windowUtils = require('sdk/window/utils'); // https://developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs/window_utils
+//const fileSystem = {
+//	createLocalFile: () => Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsILocalFile), // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsILocalFile
+//	filePicker: () => Cc["@mozilla.org/filepicker;1"].createInstance(Ci.nsIFilePicker), // https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFilePicker
+//	mimeService: Cc["@mozilla.org/uriloader/external-helper-app-service;1"].getService(Ci.nsIMIMEService),
+//	read: OS.File
+//};
+=======
+>>>>>>> Stashed changes
 var SimpleUDPSocket = require('./SimpleUDPSocket');
 var SimpleTCPSocket = require('./SimpleTCPSocket');
 var SimpleTCP = require('../SimpleTCP');
@@ -13,6 +28,10 @@ var FileUtilities = require('./FileUtilities');
 var MimeService = require('./MimeService');
 var IPResolver = require('./IPResolver');
 var UrlSdk = require('./UrlSdk');
+<<<<<<< Updated upstream
+=======
+>>>>>>> OffByNone/master
+>>>>>>> Stashed changes
 
 module.exports.createIPResolver = function () {
   return new IPResolver();
