@@ -54,8 +54,12 @@ module.exports.createStorageService = function () {
 module.exports.notifications = function () {
   return require('./Notifications');
 };
-module.exports.btoa = function () {
-  return window.btoa;
+module.exports.createBase64Utils = function () {
+  return { encode: function encode(convertMe) {
+      return window.btoa(convertMe);
+    }, decode: function decode(decodeMe) {
+      window.atob(decodeMe);
+    } };
 };
 
 module.exports.isFirefox = false;
