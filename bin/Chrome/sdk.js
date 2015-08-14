@@ -54,6 +54,9 @@ module.exports.createStorageService = function () {
 module.exports.notifications = function () {
   return require('./Notifications');
 };
+module.exports.btoa = function () {
+  return window.btoa;
+};
 
 module.exports.isFirefox = false;
 module.exports.isChrome = true;

@@ -63,6 +63,9 @@ module.exports.notifications = function () {
 module.exports.url = function () {
 	return require("sdk/url");
 }; // https://developer.mozilla.org/en-US/Add-ons/SDK/High-Level_APIs/url
+module.exports.btoa = function () {
+	return require("api-utils/base64").encode;
+}; //https://developer.mozilla.org/en-US/Add-ons/SDK/High-Level_APIs/base64
 module.exports.getNativeWindowMenu = function () {
 	return Services.wm.getMostRecentWindow("navigator:browser").NativeWindow.menu;
 }; //for firefox for android
