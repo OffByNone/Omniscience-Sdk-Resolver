@@ -5,7 +5,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Constants = require('../Constants');
+var Constants = require("../Constants");
 
 var IPResolver = (function () {
 	function IPResolver() {
@@ -27,22 +27,6 @@ var IPResolver = (function () {
 						return address;
 					}));
 				});
-				
-				// Add a media line, this is needed to activate candidate gathering.
-				peerConnection.createDataChannel('');
-
-				// onicecandidate is triggered whenever a candidate has been found.
-				peerConnection.onicecandidate = function (event) {
-					if (!event.candidate) return resolve(addresses); // Candidate gathering completed.
-
-					var ip = /^candidate:.+ (\S+) \d+ typ/.exec(event.candidate.candidate)[1];
-					if (addresses.indexOf(ip) == -1 && Constants.ipv4Regex.test(ip)) // avoid duplicate entries (tcp/udp)
-						addresses.push(ip);
-				};
-				peerConnection.createOffer(function (sdp) {
-					peerConnection.setLocalDescription(sdp);
-				}, function (err) {/*todo: something useful here*/});
-				
 			});
 		}
 	}]);
