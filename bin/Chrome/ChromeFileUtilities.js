@@ -54,7 +54,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						/*accepts: [Constants.chromeSdk.filePicker.filterAll],*/
 						acceptsMultiple: true
 					}, function (fileEntries) {
-						console.log(fileEntries);
 						var files = [];
 						fileEntries.forEach(function (file, index) {
 							_this2._fileSystem.getDisplayPath(file, function (filePath) {

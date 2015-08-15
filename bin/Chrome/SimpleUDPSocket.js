@@ -6,7 +6,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Constants = require("../Constants");
+var Constants = require('../Constants');
 
 var SimpleUDPSocket = (function () {
 	function SimpleUDPSocket(udpSocketProvider) {
@@ -18,7 +18,7 @@ var SimpleUDPSocket = (function () {
 		this._sendQueue = [];
 
 		this.localPort;
-		this.localAddress;
+		this.localIP;
 		this.multicastIP;
 		this.udpSocket;
 	}
@@ -42,9 +42,8 @@ var SimpleUDPSocket = (function () {
 				_this.localPort = socketInfo.localPort;
 				_this.localIP = socketInfo.localAddress;
 				_this.multicastIP = multicastIP;
-
 				return _this.udpSocket.joinGroup(_this.multicastIP);
-			}).then(function (result) {
+			}).then(function () {
 				_this._initialized = true;
 				_this._sendQueue.forEach(function (queuedMessage) {
 					return _this.udpSocket.send(queuedMessage.message.buffer, queuedMessage.destinationIP, queuedMessage.destinationPort);

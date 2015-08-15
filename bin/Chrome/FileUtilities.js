@@ -1,18 +1,18 @@
 
 /* global Promise */
-'use strict';
+"use strict";
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Constants = require('../Constants');
 
 var FileUtilities = (function () {
-	function FileUtilities(mimeService) {
+	function FileUtilities(mimeService, fileSystem) {
 		_classCallCheck(this, FileUtilities);
 
-		this._fileSystem = chrome.app.window.get('omniscience').contentWindow.chrome.fileSystem;
+		this._fileSystem = fileSystem;
 		this._mimeService = mimeService;
 
 		//todo: this is all tech debt baby
@@ -24,7 +24,7 @@ var FileUtilities = (function () {
 	}
 
 	_createClass(FileUtilities, [{
-		key: 'readBytes',
+		key: "readBytes",
 		value: function readBytes(filePath) {
 			var _this = this;
 
@@ -45,7 +45,7 @@ var FileUtilities = (function () {
 			});
 		}
 	}, {
-		key: 'openFileBrowser',
+		key: "openFileBrowser",
 		value: function openFileBrowser() {
 			var _this2 = this;
 

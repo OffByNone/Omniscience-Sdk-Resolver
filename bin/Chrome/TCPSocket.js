@@ -6,7 +6,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Constants = require("../Constants");
+var Constants = require('../Constants');
 
 var TCPSocket = (function () {
 	function TCPSocket(tcp, tcpServer, ipResolver) {
@@ -66,7 +66,7 @@ var TCPSocket = (function () {
 
 			this._tcp.create(null, function (createInfo) {
 				_this3.socketId = createInfo.socketId;
-				_this3._tcp.connect(createInfo.socketId, host, port, onopen);
+				_this3._tcp.connect(createInfo.socketId, host, port, _this3.onopen);
 			});
 
 			return this;
