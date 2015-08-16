@@ -5,7 +5,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Constants = require('../Constants');
+var Constants = require("../Constants");
 
 var IPResolver = (function () {
     function IPResolver(dnsService, udpProvider) {
@@ -44,7 +44,7 @@ var IPResolver = (function () {
             udpSocket.onPacketReceivedEvent(function (message) {
                 // See: https://bugzilla.mozilla.org/show_bug.cgi?id=952927
                 udpSocket.close();
-                resolve([message.fromAddr.address, '127.0.0.1']);
+                resolve([message.fromAddr.address, "127.0.0.1"]);
             });
 
             udpSocket.send(Constants.IPResolverMulticast, udpSocket.localPort, Constants.forceGetIPMessage);

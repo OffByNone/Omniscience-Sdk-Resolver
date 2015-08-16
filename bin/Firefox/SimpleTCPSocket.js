@@ -1,5 +1,5 @@
 /* global Promise */
-"use strict";
+'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -63,12 +63,7 @@ var SimpleTCPSocket = (function () {
 				try {
 					socket.close();
 					reject('Device did not respond within ' + _this3.responseTimeout / 1000 + ' seconds.');
-				} catch (e) {
-					/* todo: if the error is anything other than the socket is already closed, throw
-      * already closed, meaning we already got the response
-      * nothing to see here, move along
-      */
-				}
+				} catch (e) {}
 			}, this.responseTimeout);
 		}
 	}, {
@@ -84,3 +79,8 @@ var SimpleTCPSocket = (function () {
 })();
 
 module.exports = SimpleTCPSocket;
+
+/* todo: if the error is anything other than the socket is already closed, throw
+ * already closed, meaning we already got the response
+ * nothing to see here, move along
+ */

@@ -1,10 +1,10 @@
 /* global chrome */
 /* global Promise */
-"use strict";
+'use strict';
 
 var UDP = require('./UDPSocket');
 var TCP = require('./TCPSocket');
-var UrlSdk = require("./UrlSdk");
+var UrlSdk = require('./UrlSdk');
 var SimpleTCP = require('../SimpleTCP');
 var IPResolver = require('./IPResolver');
 var MimeService = require('./MimeService');
@@ -100,7 +100,7 @@ if (!Array.from) {
 
 			// 3. ReturnIfAbrupt(items).
 			if (arrayLike == null) {
-				throw new TypeError("Array.from requires an array-like object - not null or undefined");
+				throw new TypeError('Array.from requires an array-like object - not null or undefined');
 			}
 
 			// 4. If mapfn is undefined, then let mapping be false.
