@@ -1,9 +1,9 @@
 require("babel/register");
 
 const Constants = require("../../lib/Constants");
-const UDP = require("../../lib/Firefox/UDP");
+const UDP = require("../../lib/Firefox/UDPSocket");
 
-describe("UDP", function () {
+describe("UDPSocket", function () {
 	var _sut;
 	var _mockScriptSecurityManager;
 	var _mockUDPSocketProvider;
