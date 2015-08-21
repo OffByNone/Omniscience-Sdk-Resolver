@@ -19,12 +19,13 @@ var SocketSender = (function () {
 			var _this = this;
 
 			//todo: look into chrome.sockets.tcp.setKeepAlive -- I think it is for the client not the server
-
-			this._chromeTCP.send(socketId, data, function (resultCode, bytesSent) {
-				//todo: i have a sneaking suspicion that the bytesSent is going to be either the buffer size
-				//or file size whichever is smaller and I am going to have to loop like I do in FF
-
-				if (!keepAlive) _this._chromeTCP.close(socketId, null);
+			return new Promise(function (resolve, reject) {
+				_this._chromeTCP.send(socketId, data, function (resultCode, bytesSent) {
+					//todo: i have a sneaking suspicion that the bytesSent is going to be either the buffer size
+					//or file size whichever is smaller and I am going to have to loop like I do in FF
+					resolve();
+					if (!keepAlive) _this._chromeTCP.close(socketId, null);
+				});
 			});
 		}
 	}]);
