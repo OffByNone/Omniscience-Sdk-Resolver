@@ -74,20 +74,20 @@ describe("SocketSender", function () {
 	});
 	it("should call socket.send twice when the message takes two times to be fully sent and the buffer is not full", function () {
 		//arrange
-		var response = "";
+		var message = "";
 		for (var i = 0; i < Constants.socketBufferSize + 150; i++)
-			response += "a";
+			message += "a";
 
 		var socket = jasmine.createSpyObj("socket", ["send", "close"]);
 
 		socket.send.and.returnValue(false);
-			
+
 		//act
-		_sut.send(socket, response);
+		_sut.send(socket, message);
 			
 		//assert
 		expect(socket.send.calls.count()).toBe(2);
-		expect(socket.send).toHaveBeenCalledWith(response, 0, Constants.socketBufferSize);
-		expect(socket.send).toHaveBeenCalledWith(response, Constants.socketBufferSize, 150);
+		expect(socket.send).toHaveBeenCalledWith(message, 0, Constants.socketBufferSize);
+		expect(socket.send).toHaveBeenCalledWith(message, Constants.socketBufferSize, 150);
 	});
 });
