@@ -26,9 +26,9 @@
 		"jasmine": "^2.3.2"
 	},
 	"scripts": {
-		"lint": "./node_modules/.bin/eslint",
-		"build": "./node_modules/.bin/babel ./lib --out-dir ./bin -s",
-		"install": "./node_modules/.bin/babel ./lib --out-dir ./bin -s",
-		"test": "./node_modules/.bin/jasmine"
+		"lint": ".\\node_modules\\.bin\\eslint",
+		"build": ".\\node_modules\\.bin\\babel ./lib --out-dir ./bin -s",
+		"install": ".\\node_modules\\.bin\\babel ./lib --out-dir ./bin -s",
+		"test": ".\\node_modules\\.bin\\jasmine"
 	}
 }
