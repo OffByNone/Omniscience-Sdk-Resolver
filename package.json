@@ -26,12 +26,9 @@
 		"jasmine": "^2.3.2"
 	},
 	"scripts": {
-		"lint": "eslint",
-		"build": "babel ./lib --out-dir ./bin -s",
-		"post": "jpm post --post-url=http://127.0.0.1:7999",
-		"buildpost": "npm run build && npm run post",
-		"compile": "npm run build && jpm xpi",
-		"install": "babel ./lib --out-dir ./bin -s",
-		"test": "jasmine"
+		"lint": "./node_modules/.bin/eslint",
+		"build": "./node_modules/.bin/babel ./lib --out-dir ./bin -s",
+		"install": "./node_modules/.bin/babel ./lib --out-dir ./bin -s",
+		"test": "./node_modules/.bin/jasmine"
 	}
 }
