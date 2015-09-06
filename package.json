@@ -27,8 +27,8 @@
 	},
 	"scripts": {
 		"lint": ".\\node_modules\\.bin\\eslint",
-		"build": ".\\node_modules\\.bin\\babel ./lib --out-dir ./bin -s",
-		"install": ".\\node_modules\\.bin\\babel ./lib --out-dir ./bin -s",
+		"build": ".\\node_modules\\.bin\\babel ./lib --out-dir ./bin",
+		"install": ".\\node_modules\\.bin\\babel ./lib --out-dir ./bin",
 		"test": ".\\node_modules\\.bin\\jasmine"
 	}
 }
